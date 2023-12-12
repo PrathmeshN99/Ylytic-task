@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import requests
 import json
 from datetime import datetime
+import awsgi
 
 app = Flask(__name__)
 BASE_URL = "https://app.ylytic.com/ylytic/test"
@@ -36,6 +37,9 @@ def search_comments():
             filtered_comments.append(comment)
 
     return jsonify(filtered_comments)
+
+def lambda_handler(event, context):
+    return awsgi.response(app, event, context, base64_content_types={"image/png"})
 
 if __name__ == '__main__':
     app.run(debug=True)
